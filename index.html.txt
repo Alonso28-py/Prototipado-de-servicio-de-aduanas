@@ -3,50 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGAI - Paso Pehuenche | V1.0</title>
+    <title>SGAI - Paso Pehuenche | V1.1</title>
+<title>SGAI - Paso Pehuenche | V1.2</title>
+<!-- Usamos Tailwind CSS vía CDN para un diseño rápido y profesional -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
 
-    <div class="bg-white rounded-xl shadow-lg p-8 max-w-md w-full border-t-4 border-blue-800">
+    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full border-t-4 border-blue-700">
         
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-blue-900">SGAI Aduanas</h1>
-            <p class="text-sm text-slate-500">Paso Fronterizo Pehuenche - Prototipo V1.0</p>
+        <div class="text-center mb-8">
+            <div class="mx-auto bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                <svg class="w-8 h-8 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+            </div>
+            <h1 class="text-2xl font-bold text-slate-800">SGAI Aduanas</h1>
+            <p class="text-sm text-slate-500 mt-1">Paso Fronterizo Pehuenche - V1.2</p>
         </div>
 
-        <form id="formularioAduana" class="space-y-4" onsubmit="event.preventDefault(); simularEnvio();">
+        <form id="formularioAduana" class="space-y-5" onsubmit="event.preventDefault(); simularEnvio();">
             
+            <!-- Campo RUT -->
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">RUT o Pasaporte</label>
                 <input type="text" id="rut" placeholder="Ej: 12.345.678-9" 
-                       class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                       class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-slate-50 focus:bg-white text-slate-700">
             </div>
 
+            <!-- Campo Patente -->
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Patente del Vehículo</label>
                 <input type="text" id="patente" placeholder="Ej: ABCD12 o C.D." 
-                       class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-                <p class="text-xs text-slate-500 mt-1">* Para diplomáticos ingrese "C.D." o "CC".</p>
+                       class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-slate-50 focus:bg-white text-slate-700">
+                <p class="text-xs text-slate-500 mt-2 flex items-center">
+                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                    Para diplomáticos ingrese "C.D." o "CC".
+                </p>
             </div>
 
+            <!-- Botón de Envío -->
             <button type="submit" 
-                    class="w-full bg-blue-800 hover:bg-blue-900 text-white font-bold py-3 px-4 rounded-lg transition duration-200 mt-4 shadow-md">
+                    class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-xl transition duration-200 mt-6 shadow-lg shadow-blue-200 flex justify-center items-center">
                 Generar Trámite
             </button>
         </form>
 
-        <div id="resultado" class="hidden mt-6 p-4 bg-green-50 border border-green-200 rounded-lg text-center">
-            <p class="text-green-800 font-semibold">¡Trámite guardado en versión 1.0!</p>
-            <p class="text-sm text-green-600 mt-1">(Aún sin validación de días ni QR)</p>
+        <!-- Mensaje de Error (Nuevo en V1.1) -->
+        <div id="mensajeError" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-xl text-center text-red-600 text-sm font-medium transition-all duration-300">
+            ⚠ Por favor, complete todos los campos requeridos.
+        </div>
+
+        <!-- Contenedor de Respuesta Simulada -->
+        <div id="resultado" class="hidden mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-center transition-all duration-300 transform scale-95 opacity-0">
+            <div class="text-emerald-500 mb-2 flex justify-center">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <p class="text-emerald-800 font-semibold text-lg">¡Trámite generado exitosamente!</p>
+            <div class="mt-3 p-3 bg-white rounded-lg border border-emerald-100 shadow-sm">
+                <p id="textoPatente" class="text-sm text-slate-500 font-medium"></p>
+                <p id="textoDias" class="text-2xl font-bold text-emerald-600 mt-1"></p>
+            </div>
         </div>
 
     </div>
 
     <script>
         function simularEnvio() {
-            // En esta Iteración 1, solo mostramos el mensaje de éxito sin validar nada.
-            document.getElementById('resultado').classList.remove('hidden');
+            // Iteración 2.1: Validaciones y Reglas de Negocio Robustas
+            const btn = document.querySelector('button[type="submit"]');
+            const resultado = document.getElementById('resultado');
+            const mensajeError = document.getElementById('mensajeError');
+            
+            // Obtener valores de los campos
+            const rut = document.getElementById('rut').value.trim();
+            const patente = document.getElementById('patente').value.trim().toUpperCase();
+
+            // Ocultar mensajes previos
+            resultado.classList.add('hidden', 'scale-95', 'opacity-0');
+            mensajeError.classList.add('hidden');
+
+            // Validación de Usabilidad (Evita enviar si hay campos vacíos)
+            if (rut === '' || patente === '') {
+                mensajeError.classList.remove('hidden');
+                return; // Corta la ejecución de la función aquí mismo
+            }
+
+            // Regla de Negocio: Días de vigencia
+            // Limpiamos la patente de puntos y espacios para una validación más exacta
+            const patenteLimpia = patente.replace(/[\.\- ]/g, '');
+            
+            let diasOtorgados = 180;
+            // Si la patente empieza con CD o CC (Cuerpo Diplomático/Consular), son 90 días
+            if (patenteLimpia.startsWith('CD') || patenteLimpia.startsWith('CC')) {
+                diasOtorgados = 90;
+            }
+
+            // Efecto visual de carga simple
+            btn.innerHTML = '<svg class="animate-spin h-5 w-5 mr-3 text-white inline-block" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Procesando...';
+            btn.disabled = true;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
+
+            // Ocultar mensaje previo si existiera
+            resultado.classList.add('hidden', 'scale-95', 'opacity-0');
+
+            setTimeout(() => {
+                // Restaurar botón
+                btn.innerHTML = 'Generar Trámite';
+                btn.disabled = false;
+                btn.classList.remove('opacity-70', 'cursor-not-allowed');
+                
+                // Actualizar texto de respuesta con la patente y los días otorgados
+                document.getElementById('textoPatente').innerText = `Vehículo patente: ${patente}`;
+                document.getElementById('textoDias').innerText = `${diasOtorgados} DÍAS OTORGADOS`;
+
+                // Mostrar resultado con animación
+                resultado.classList.remove('hidden');
+                // Pequeño delay para que la transición CSS surta efecto
+                setTimeout(() => {
+                    resultado.classList.remove('scale-95', 'opacity-0');
+                    resultado.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }, 800);
         }
     </script>
 </body>
